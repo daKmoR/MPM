@@ -139,7 +139,7 @@ class MPR extends Options {
 		if ($what === 'css' || $what === 'jsInlineCss') {
 			foreach( $fileList['css'] as $file ) {
 				$raw = file_get_contents($this->options->pathToMpr . $file);
-				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($file) . "/$1')", $raw); //prepend local files
+				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . $this->options->pathToMpr . dirname($file) . "/$1')", $raw); //prepend local files
 				$css .= $raw . PHP_EOL;
 			}
 			if ( $this->options->compressCss === 'minify' ) {

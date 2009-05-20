@@ -45,7 +45,8 @@ class Plugin extends Options {
 		$this->options->path = $path;
 		
 		$path = explode('/', $path);
-		$this->options->category = $path[1];
+		$pathPartCount = count($path);
+		$this->options->category = $path[$pathPartCount-2];
 	}
 	
 	/**

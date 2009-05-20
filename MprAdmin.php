@@ -10,10 +10,13 @@
 	require_once('Classes/class.MprAdmin.php');
 		
 	$path = explode('/', $_REQUEST['file']);
-	if( $path[0] !== '.' )
-		array_unshift($path, '.');
+	// if( $path[0] !== '.' )
+		// array_unshift($path, '.');
+		
+	$pathPartCount = count($path);
 	
 	$MprAdmin = new MprAdmin( $MprAdminOptions );
+	
 	if( is_file('Configuration/USE_ADMIN_FUNCTIONS') )
 		$MprAdmin->options->admin = true;
 		
@@ -39,7 +42,8 @@
 	if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
 		$demoCode = file_get_contents( $_REQUEST['file'] );
 		
-		$center .= str_replace('../', $path[1] . '/' . $path[2] . '/', Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->') );
+		$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+		$center = str_replace('"../', '"' . $MprAdmin->options->path . $path[$pathPartCount-4] . '/' . $path[$pathPartCount-3] . '/', $center );
 		
 		$codeHeader = Helper::getContent($demoCode, '<!-- ### Mpr.Header.Start ### -->', '<!-- ### Mpr.Header.End ### -->');
 		if( $codeHeader ) $header .= $codeHeader;

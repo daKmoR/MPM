@@ -24,9 +24,9 @@ class MprAdmin extends Options {
 		),
 		'path'				=> '../MPR/',
 		'admin' => false,
-		'zipPath' => 'Mpr/MprZip/',
-		'indexPath' => 'Mpr/MprIndex/',
-		'cachePath' => 'Mpr/MprCache/'
+		'zipPath' => 'Data/MprZip/',
+		'indexPath' => 'Data/MprIndex/',
+		'cachePath' => 'Data/MprCache/'
 	);
 	
 	private $files = array();
