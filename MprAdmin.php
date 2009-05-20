@@ -140,7 +140,7 @@
 	require_once 'Classes/class.Mpr.php';
 	$localMPR = new MPR( $MprOptions );
 	$scriptTag = $localMPR->getScriptTagInlineCss(
-		file_get_contents( 'Mpr/Resources/js/MprAdmin.js' ) . PHP_EOL . 
+		file_get_contents( 'Resources/js/MprAdmin.js' ) . PHP_EOL . 
 		$js
 	);
 
@@ -152,7 +152,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="Mpr/Resources/css/screen.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="Resources/css/screen.css" type="text/css" media="screen" />
 
 		<!--[if IE 7]> 
 			<link rel="stylesheet" href="Resources/css/screen_ie7.css" type="text/css" media="screen" />
@@ -179,7 +179,7 @@
 		
 		<?php echo $header; ?>
 		
-		<script type="text/javascript" src="Mpr/Resources/js/MprAdmin.js"></script>
+		<script type="text/javascript" src="Resources/js/MprAdmin.js"></script>
 		
 	</head>
 	<body>

@@ -13,12 +13,12 @@ class MPR extends Options {
 
 	public $options = array(
 		'base' => '',
-		'pathToMpr' => '',
+		'pathToMpr' => '../MPR/',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
 		'cssMprIsUsed' => true,
 		'externalFiles' => true,
 		'cache' => true,
-		'cachePath' => 'Mpr/MprCache/',
+		'cachePath' => 'Data/MprCache/',
 		'jsMinPath' => 'class.JsMin.php',
 		'compressJs' => 'minify', //[none, minify]
 		'compressCss' => 'minify' //[none, minify]
@@ -33,7 +33,7 @@ class MPR extends Options {
 
 	public function __construct($options = null) {
 		$this->setOptions($options);
-		$this->options->cachePath = $this->options->pathToMpr . $this->options->cachePath;
+		$this->options->cachePath = $this->options->cachePath;
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class MPR extends Options {
 		
 		$fileList = $this->getFileList( $jsCode );
 		$content = '';
-		$js = (count($fileList['js']) != 0 AND count($fileList['css'] != 0) )  ? file_get_contents($this->options->pathToMpr . 'Mpr/Mpr.js') : '';
+		$js = (count($fileList['js']) != 0 AND count($fileList['css'] != 0) )  ? file_get_contents($this->options->pathToMpr . 'Tools/Mpr/Mpr.js') : '';
 		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)

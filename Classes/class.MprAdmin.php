@@ -53,7 +53,6 @@ class MprAdmin extends Options {
 	public function render() {
 		$this->files = Helper::getFiles( $this->options->path, 'dirs' );
 		unset( $this->files['.git'] );
-		unset( $this->files['Mpr'] );
 	
 		$content = '';
 		foreach( $this->files as $dir => $subdir ) {
@@ -78,10 +77,10 @@ class MprAdmin extends Options {
 	
 	public function getDocu( $markdownString ) {
 			// Get the classes:
-		require_once 'Mpr/Php/mdocs/markdown.php';
-		require_once 'Mpr/Php/mdocs/markdown.mdocs.php';
-		require_once 'Mpr/Php/mdocs/geshi.php';
-		require_once 'Mpr/Php/mdocs/geshi.mdocs.php';
+		require_once 'Resources/Php/mdocs/markdown.php';
+		require_once 'Resources/Php/mdocs/markdown.mdocs.php';
+		require_once 'Resources/Php/mdocs/geshi.php';
+		require_once 'Resources/Php/mdocs/geshi.mdocs.php';
 
 		$markdown = new MarkdownExtra_Parser_mDocs();
 		$markdown->maxlevel = 1;
@@ -95,7 +94,7 @@ class MprAdmin extends Options {
 	}
 	
 	public function highlight( $source, $language = 'javascript' ) {
-		require_once 'Mpr/Php/mdocs/geshi.php';
+		require_once 'Resources/Php/mdocs/geshi.php';
 		
 		$geshi = new GeSHi($source, $language);
 		return $geshi->parse_code();		
@@ -107,7 +106,7 @@ class MprAdmin extends Options {
 			
 		$pathArray = explode('/', $path);
 			
-		require_once 'Mpr/Php/class.AdvZipArchive.php';
+		require_once 'Classes/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
 		if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
 			$myZip->addDir( $path, $path );
@@ -190,7 +189,7 @@ class MprAdmin extends Options {
 	}
 	
 	public function search( $query, $mode = 'html' ) {
-		ini_set('include_path', 'Mpr/Php/');
+		ini_set('include_path', 'Resources/Php/');
 		require_once('Zend/Search/Lucene.php');
  
 		$index = Zend_Search_Lucene::open( $this->options->indexPath );
@@ -229,7 +228,7 @@ class MprAdmin extends Options {
 	}
 	
 	public function newIndex() {
-		ini_set('include_path', 'Mpr/Php/');
+		ini_set('include_path', 'Resources/Php/');
 		require_once('Zend/Search/Lucene.php');
 		require_once('class.MprIndexedDocument.php');
 		
@@ -237,7 +236,6 @@ class MprAdmin extends Options {
 	
 		$files = Helper::getFiles( './', 'dirs' );
 		unset( $files['.git'] );
-		unset( $files['Mpr'] );
 		
 		foreach($files as $category => $subdir) {
 			foreach( $subdir as $dir => $items ) {
