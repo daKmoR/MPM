@@ -14,9 +14,9 @@
 		array_unshift($path, '.');
 	
 	$MprAdmin = new MprAdmin( $MprAdminOptions );
-	if( is_file('USE_ADMIN_FUNCTIONS') )
+	if( is_file('Configuration/USE_ADMIN_FUNCTIONS') )
 		$MprAdmin->options->admin = true;
-	
+		
 	if ( $_REQUEST['mode'] === 'install' && $_REQUEST['file'] != '' ) {
 		$status = $MprAdmin->install( $_REQUEST['file'] );
 		$center = $status ? 'Install successful' : 'Install failed';

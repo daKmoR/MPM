@@ -1,6 +1,5 @@
 <?php
 
-	
 	$useGzip = true;               // do you want to use gzip for supplying the generated scripts [deactivate it if you globally use Gzip]
 	
 	$MprAdminOptions = array(
@@ -17,8 +16,8 @@
 	);
 	
 	// if there is a MprConfig.php file in the root folder include it - you can override any value there
-	if( is_file('MprConfig.php') )
-		include_once 'MprConfig.php';
+	if( is_file('Configuration/MprConfig.php') )
+		include_once 'Configuration/MprConfig.php';
 	
 	if( !$MprAdminOptions['cachePath'] )
 		$MprAdminOptions['cachePath'] = $MprOptions['cachePath'];
