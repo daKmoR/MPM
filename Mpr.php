@@ -4,19 +4,22 @@
 
 	require_once('Mpr/Php/MprConfig.php');
 	
-	header('Content-Type: text/javascript');
-	
 	if( $useGzip === true )
 		ob_start("ob_gzhandler");
 	
-	if($_REQUEST['mode'] !== 'noCore') {
-		echo file_get_contents('Mpr/MprFullCore.js');
-	}
-
-	if($_REQUEST['mode'] !== 'onlyCore') {
-		require_once('Mpr/Php/class.Mpr.php');
+	if(!$_REQUEST['mode']) {
+		header('Content-Type: text/javascript');
+		require_once('Classes/class.Mpr.php');
 		$localMPR = new MPR( $MprOptions );
 		echo $localMPR->getJsInlineCss($url);
+		
+	} elseif( $_REQUEST['mode'] === 'js' ) {
+		header('Content-Type: text/javascript');
+		$localMPR->getScript($url);
+		
+	} elseif( $_REQUEST['mode'] === 'css' ) {
+		header('Content-Type: text/css');
+		echo $localMPR->getCss($url);
 	}
 	
 	/* JUST LEAVE THEM AS A REFERENCE - TO KNOW WHAT THE MprCore NEEDS 
