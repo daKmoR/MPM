@@ -10,9 +10,6 @@
 	require_once('Classes/class.MprAdmin.php');
 		
 	$path = explode('/', $_REQUEST['file']);
-	// if( $path[0] !== '.' )
-		// array_unshift($path, '.');
-		
 	$pathPartCount = count($path);
 	
 	$MprAdmin = new MprAdmin( $MprAdminOptions );
@@ -54,6 +51,7 @@
 		$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 		if( $js ) $header .= Helper::wrap($js, '<script type="text/javascript">|</script>');
 		
+		
 	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
 		/*************************/
 		// DOCU
@@ -80,16 +78,19 @@
 			die();
 		}
 		
+		
 	} elseif ( $_REQUEST['mode'] === 'zip' && $_REQUEST['file'] != '' ) {
 		$MprAdmin->getZip( $_REQUEST['file'] );
 		
+		
 	} elseif ( $_REQUEST['mode'] === 'pluginDetails' && $_REQUEST['file'] != '' ) {
-		$center = $MprAdmin->showPluginDetails( $_REQUEST['file'] );
+		$center = $MprAdmin->showPluginDetails( $path[$pathPartCount-3] . '/' . $path[$pathPartCount-2] );
+		
 		
 	} elseif ( $_REQUEST['mode'] === 'source' && $_REQUEST['file'] != '' ) {
-	
-		$center = '<h1>' . $path[3] . '</h1>';
+		$center = '<h1>' . $path[$pathPartCount-1] . '</h1>';
 		$center .= $MprAdmin->highlight( file_get_contents( $_REQUEST['file'] ) );
+		
 	
 	} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
 		$center .= '<div>
@@ -120,6 +121,7 @@
 			$center .= '<p class="notice">no Plugins to restore; pls check the directory "' . $MprAdminOptions['zipPath'] . '" if it contains the needed backupfiles</p>';
 		$center .= '</div>';
 		$center .= '<div><h2>UnInstall</h2><p class="notice">for uninstalling pls use the Uninstall Option on the left</p></div>';
+		
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
 		$files = Helper::getFiles('./', 1);
@@ -166,13 +168,18 @@
 			<link rel="stylesheet" href="Resources/css/screen_ie6.css" type="text/css" media="screen" />
 		<![endif]-->
 		
-		<title><?php if($_REQUEST['mode']) echo $path[2] . ' ' . ucfirst($_REQUEST['mode']) . ' - '; ?>Your Local MPR (MooTools Plugin Repository)</title>
+		<title><?php if($_REQUEST['mode']) echo $path[$pathPartCount-3] . ' ' . ucfirst($_REQUEST['mode']) . ' - '; ?>Your Local MPR (MooTools Plugin Repository)</title>
 		
 		<script type="text/javascript">
 			var MPR = {};
 			MPR.path = '';
 			
-			MenuPath = '<?php echo $path[1]; ?>';
+			MenuPath = '<?php 
+				if( $path[$pathPartCount-4] !== 'MPR') 
+					echo $path[$pathPartCount-4]; 
+				else 
+					echo $path[$pathPartCount-3]; 
+			?>';
 		</script>
 		
 		<?php

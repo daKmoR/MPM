@@ -69,7 +69,7 @@ class Plugin extends Options {
 		//$this->options->demo = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>demo</span></a>' : '';
 		$this->options->download = '<a class="download" href="?mode=zip&amp;file=' . $this->options->category . '/' . $this->options->name  . '"><span>download</span></a>';
 		$this->options->docu = is_file($docuPath) ? '<a class="docu" href="?mode=docu&amp;file=' . $docuPath . '"><span>docu</span></a>' : '';
-		$this->options->name = '<a href="?mode=pluginDetails&amp;file=' . $this->options->category . '/' . $this->options->name . '"><span>' . $this->options->name . '</span></a>';
+		$this->options->name = '<a href="?mode=pluginDetails&amp;file=' . $this->options->path . '/' . '"><span>' . $this->options->name . '</span></a>';
 		$this->options->spec = is_file($specPath) ? '<a class="spec" href="?mode=spec&amp;file=' . $specPath . '"><span>spec</span></a>' : '';
 	}
 	
