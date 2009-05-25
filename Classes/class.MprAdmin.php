@@ -234,12 +234,12 @@ class MprAdmin extends Options {
 		
 		$index = Zend_Search_Lucene::create( $this->options->indexPath );
 	
-		$files = Helper::getFiles( './', 'dirs' );
+		$files = Helper::getFiles( $this->options->path, 'dirs' );
 		unset( $files['.git'] );
 		
 		foreach($files as $category => $subdir) {
 			foreach( $subdir as $dir => $items ) {
-				$path = './' . $category . '/' . $dir . '/Docu/';
+				$path = $this->options->path . $category . '/' . $dir . '/Docu/';
 				if( is_dir($path) ) {
 					$docuFiles = Helper::getFiles( $path, 'files' );
 					if( count($docuFiles) ) {
@@ -257,7 +257,8 @@ class MprAdmin extends Options {
 					}
 				}
 					
-				$path = './' . $category . '/' . $dir . '/Demos/';
+				$path = $this->options->path . $category . '/' . $dir . '/Demos/';
+				
 				if( is_dir($path) ) {
 					$demoFiles = Helper::getFiles( $path, 'files' );
 					if( count($demoFiles) ) {
