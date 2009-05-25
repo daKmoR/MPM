@@ -228,60 +228,65 @@ class MprAdmin extends Options {
 	}
 	
 	public function newIndex() {
-		ini_set('include_path', 'Resources/Php/');
-		require_once('Zend/Search/Lucene.php');
-		require_once('class.MprIndexedDocument.php');
-		
-		$index = Zend_Search_Lucene::create( $this->options->indexPath );
-	
-		$files = Helper::getFiles( $this->options->path, 'dirs' );
-		unset( $files['.git'] );
-		
-		foreach($files as $category => $subdir) {
-			foreach( $subdir as $dir => $items ) {
-				$path = $this->options->path . $category . '/' . $dir . '/Docu/';
-				if( is_dir($path) ) {
-					$docuFiles = Helper::getFiles( $path, 'files' );
-					if( count($docuFiles) ) {
-						foreach( $docuFiles as $docu ) {
-							$text = file_get_contents($path . $docu);
-							$teaser = explode("\n", substr($text, 0, 300) );
-							$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
-							$id = 'MprAdmin.php?mode=docu&file=' . $path . $docu;
-						
-							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $docu , 'content' => $text);
-							
-							$doc = new MprIndexedDocument($curDoc);
-							$index->addDocument($doc);
-						}
-					}
-				}
-					
-				$path = $this->options->path . $category . '/' . $dir . '/Demos/';
-				
-				if( is_dir($path) ) {
-					$demoFiles = Helper::getFiles( $path, 'files' );
-					if( count($demoFiles) ) {
-						foreach( $demoFiles as $demo ) {
-							$demoCode = file_get_contents( $path . $demo );
-							$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
-							$teaser = explode("\n", substr($text, 0, 300) );
-							$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
-							$id = 'MprAdmin.php?mode=demo&file=' . $path . $demo;
-							$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
-							$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
+		if( $this->checkPermission() ) {
 
-							$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $demo, 'content' => $text);
-							$doc = new MprIndexedDocument($curDoc);
-							$index->addDocument($doc);
+			ini_set('include_path', 'Resources/Php/');
+			require_once('Zend/Search/Lucene.php');
+			require_once('class.MprIndexedDocument.php');
+			
+			$index = Zend_Search_Lucene::create( $this->options->indexPath );
+		
+			$files = Helper::getFiles( $this->options->path, 'dirs' );
+			unset( $files['.git'] );
+			
+			foreach($files as $category => $subdir) {
+				foreach( $subdir as $dir => $items ) {
+					$path = $this->options->path . $category . '/' . $dir . '/Docu/';
+					if( is_dir($path) ) {
+						$docuFiles = Helper::getFiles( $path, 'files' );
+						if( count($docuFiles) ) {
+							foreach( $docuFiles as $docu ) {
+								$text = file_get_contents($path . $docu);
+								$teaser = explode("\n", substr($text, 0, 300) );
+								$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
+								$id = 'MprAdmin.php?mode=docu&file=' . $path . $docu;
+							
+								$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $docu , 'content' => $text);
+								
+								$doc = new MprIndexedDocument($curDoc);
+								$index->addDocument($doc);
+							}
 						}
-					
 					}
+						
+					$path = $this->options->path . $category . '/' . $dir . '/Demos/';
+					
+					if( is_dir($path) ) {
+						$demoFiles = Helper::getFiles( $path, 'files' );
+						if( count($demoFiles) ) {
+							foreach( $demoFiles as $demo ) {
+								$demoCode = file_get_contents( $path . $demo );
+								$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
+								$teaser = explode("\n", substr($text, 0, 300) );
+								$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
+								$id = 'MprAdmin.php?mode=demo&file=' . $path . $demo;
+								$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
+								$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
+
+								$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'demo', 'title' => $demo, 'content' => $text);
+								$doc = new MprIndexedDocument($curDoc);
+								$index->addDocument($doc);
+							}
+						
+						}
+					}
+					
 				}
-				
 			}
+			$index->commit();
+			return true;
 		}
-		$index->commit();
+		return false;
 	}
 	
 }
