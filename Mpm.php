@@ -7,12 +7,12 @@
 		// die('you can only use files within MPR');
 
 	require_once('Resources/Php/FirePHPCore/fb.php');
-	require_once('Classes/class.MprAdmin.php');
+	require_once('Classes/class.Mpm.php');
 		
 	$path = explode('/', $_REQUEST['file']);
 	$pathPartCount = count($path);
-	
-	$MprAdmin = new MprAdmin( $MprAdminOptions );
+
+	$MprAdmin = new Mpm( $MprAdminOptions );
 	
 	if( is_file('Configuration/USE_ADMIN_FUNCTIONS') )
 		$MprAdmin->options->admin = true;
@@ -126,7 +126,6 @@
 	} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
 		$files = Helper::getFiles('./', 1);
 		unset( $files['.git'] );
-		unset( $files['Mpr'] );
 
 		$center .= '<div><h2>UnInstall</h2>';
 		$unInstall = '';
@@ -199,12 +198,12 @@
 		
 			<form action="" method="get" id="searchForm">
 				<div id="header">
-					<h2 style="border: none; margin-bottom: 10px;"><a href="./MprAdmin.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
+					<h2 style="border: none; margin-bottom: 10px;"><a href="./Mpm.php">Your Local <acronym title="MooTools Plugin Repository">MPR</acronym></a></h2>
 					<div id="search">
 						<input type="text" name="query" id="searchInput" />
 						<input type="hidden" name="mode" value="search" />
 						<div id="searchResult">
-							<h3><a href="MprAdmin.php?mode=doc&amp;file=./Core/Element.Style/Doc/Element.Style.md">Core / Element.Style</a></h3>
+							<h3><a href="Mpm.php?mode=doc&amp;file=./Core/Element.Style/Doc/Element.Style.md">Core / Element.Style</a></h3>
 							<p>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $....</p>
 						</div>
 					</div>

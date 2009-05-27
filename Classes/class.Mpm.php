@@ -5,15 +5,13 @@ require_once('class.Helper.php');
 require_once('class.Plugin.php');
 
 /**
- * DESCRIPTION
+ * The MooTools Package Manager
  *
- * @package MPR
- * @subpackage Controller
- * @version $Id:
+ * @package MPM
  * @copyright Copyright belongs to the respective authors
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
  */
-class MprAdmin extends Options {
+class Mpm extends Options {
 
 	public $options = array(
 		'categoryWrap' => '<div>|</div>',
@@ -39,15 +37,15 @@ class MprAdmin extends Options {
 	 * @return void
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
-	public function MprAdmin($options = null) {
+	public function Mpm($options = null) {
 		$this->setOptions($options);
 	}
 	
 	/**
-	 * DESCRIPTION
+	 * gives you a list with all "registered" Plugins
 	 *
 	 * @param string $input
-	 * @return void
+	 * @return string
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function render() {
@@ -249,7 +247,7 @@ class MprAdmin extends Options {
 								$text = file_get_contents($path . $docu);
 								$teaser = explode("\n", substr($text, 0, 300) );
 								$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
-								$id = 'MprAdmin.php?mode=docu&file=' . $path . $docu;
+								$id = 'Mpm.php?mode=docu&file=' . $path . $docu;
 							
 								$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $docu , 'content' => $text);
 								
@@ -269,7 +267,7 @@ class MprAdmin extends Options {
 								$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 								$teaser = explode("\n", substr($text, 0, 300) );
 								$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
-								$id = 'MprAdmin.php?mode=demo&file=' . $path . $demo;
+								$id = 'Mpm.php?mode=demo&file=' . $path . $demo;
 								$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
 								$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 
