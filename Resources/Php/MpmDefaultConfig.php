@@ -2,7 +2,7 @@
 
 	$useGzip = true;               // do you want to use gzip for supplying the generated scripts [deactivate it if you globally use Gzip]
 	
-	$MprAdminOptions = array(
+	$MpmOptions = array(
 		'indexPath' => 'Data/MprIndex/',  // the folder where you want to save the search index [relative or absolute]
 		'zipPath'   => 'Data/MprZip/',    // the folder where to save/expect full Plugins as zip files [relative or absolute]
 		'path'      => '../MPR/'          // relative path to the Repository
@@ -18,10 +18,10 @@
 	);
 	
 	// if there is a MprConfig.php file in the root folder include it - you can override any value there
-	if( is_file('Configuration/MprConfig.php') )
-		include_once 'Configuration/MprConfig.php';
+	if( is_file('Configuration/MpmConfig.php') )
+		include_once 'Configuration/MpmConfig.php';
 	
-	if( !$MprAdminOptions['cachePath'] )
-		$MprAdminOptions['cachePath'] = $MprOptions['cachePath'];
+	if( !$MpmOptions['cachePath'] )
+		$MpmOptions['cachePath'] = $MprOptions['cachePath'];
 	
 ?>

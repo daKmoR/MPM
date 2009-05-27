@@ -29,9 +29,9 @@ window.addEvent('domready', function() {
 	
 	SearchResult.fade('hide');
 	var SearchRequest = new Request({
-		url: 'MprAdmin.php',
+		url: 'Mpm.php',
 		onRequest: function() {
-			SearchResult.set('html', '<img src="Mpr/Resources/css/img/ajax-loader.gif" alt="loading..." class="spinner" />');
+			SearchResult.set('html', '<img src="Resources/css/img/ajax-loader.gif" alt="loading..." class="spinner" />');
 			SearchResult.fade(1);
 		},
 		onComplete: function(els) {

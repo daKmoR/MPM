@@ -55,14 +55,14 @@
 	} elseif ( $_REQUEST['mode'] === 'docu' && $_REQUEST['file'] != '' ) {
 		/*************************/
 		// DOCU
-		$header = '<link rel="stylesheet" href="Mpr/Resources/css/docs.css" type="text/css" media="screen" />';
+		$header = '<link rel="stylesheet" href="Resources/css/docs.css" type="text/css" media="screen" />';
 		$center = $MprAdmin->getDocu( file_get_contents($_REQUEST['file']) );
 		
 	} elseif ($_REQUEST['mode'] === 'spec')  {
 		$header = '
-			<link rel="stylesheet" href="Mpr/Resources/css/specs.css" type="text/css" media="screen" />
-			<script src="Mpr/Resources/js/JSSpec.js" type="text/javascript"></script>
-			<script src="Mpr/Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
+			<link rel="stylesheet" href="Resources/css/specs.css" type="text/css" media="screen" />
+			<script src="Resources/js/JSSpec.js" type="text/javascript"></script>
+			<script src="Resources/js/DiffMatchPatch.js" type="text/javascript"></script>
 			<script src="' . $_REQUEST['file'] . '" type="text/javascript"></script>
 		';
 		$center = '<div id="jsspec_container"></div>';
@@ -145,7 +145,7 @@
 	require_once 'Classes/class.Mpr.php';
 	$localMPR = new MPR( $MprOptions );
 	$scriptTag = $localMPR->getScriptTagInlineCss(
-		file_get_contents( 'Resources/js/MprAdmin.js' ) . PHP_EOL . 
+		file_get_contents( 'Resources/js/Mpm.js' ) . PHP_EOL . 
 		$js
 	);
 
@@ -182,14 +182,12 @@
 		</script>
 		
 		<?php
-			//<script src="Mpr/MprFullCore.js" type="text/javascript"></script>
-			//<script src="Mpr.php?mode=noCore" type="text/javascript"></script>
 			echo $scriptTag;
 		?>
 		
 		<?php echo $header; ?>
 		
-		<script type="text/javascript" src="Resources/js/MprAdmin.js"></script>
+		<script type="text/javascript" src="Resources/js/Mpm.js"></script>
 		
 	</head>
 	<body>
