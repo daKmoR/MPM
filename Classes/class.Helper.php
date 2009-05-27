@@ -25,10 +25,12 @@ class Helper {
 	}
 	
 	/**
-	 * $mode: 0 => dirs and files; 1 => only dirs;  2 => only files
+	 * gives you an array for the given path in the given mode:
+	 *   'both' => dirs and files; 'dirs' => only dirs; 'files' => only files
 	 *
-	 * @param string $input
-	 * @return void
+	 * @param string $path
+	 * @param string $mode ['both', files, 'dirs']
+	 * @return array
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public static function getFiles($path, $mode = 'both', $depth = 2) {
@@ -51,24 +53,34 @@ class Helper {
 		return $files;
 	}
 	
+	/**
+	 * removes a directory and all it files
+	 * 
+	 * @param string $dir path to the directory
+	 * @param boolean $DeleteMe (def. true) do you want to the delete the directory itself
+	 * @return void
+	 * @author Thomas Allmer <at@delusionworld.com>
+	 */
 	public static function removeDir($dir, $DeleteMe = TRUE) {
-		if ( ! $dh = @opendir ( $dir ) ) return;
+		$dh = @opendir ($dir);
+		if (!$dh) return;
 		while ( false !== ( $obj = readdir ( $dh ) ) ) {
 			if ( $obj == '.' || $obj == '..') continue;
 			if ( ! @unlink ( $dir . '/' . $obj ) ) Helper::removeDir ( $dir . '/' . $obj, true );
 		}
-		closedir ( $dh );
-		if ( $DeleteMe ) 
+		closedir ($dh);
+		if ($DeleteMe) 
 			@rmdir ( $dir );
 	}
 	
 	public static function getContent($content, $markerTop = '<!-- ### Mpr.Html.Start ### -->', $markerBottom = '<!-- ### Mpr.Html.End ### -->', $mode = 'cut') {
-		$whereTop = 0;
-		if ($whereTop = strpos($content, $markerTop))
+		$whereTop = strpos($content, $markerTop);
+		if ($whereTop)
 		  $whereTop += strlen($markerTop);
 		
 		$length = strlen($content) - $whereTop;
-		if ($whereBottom = strrpos($content, $markerBottom))
+		$whereBottom = strrpos($content, $markerBottom);
+		if ($whereBottom)
 			$length = $whereBottom - $whereTop;
 			
 		if ($whereTop || $whereBottom) {
