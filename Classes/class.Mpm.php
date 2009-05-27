@@ -101,13 +101,13 @@ class Mpm extends Options {
 	public function createZip( $path ) {
 		if( !is_dir($this->options->zipPath) )
 			mkdir( $this->options->zipPath );
-			
+
 		$pathArray = explode('/', $path);
 			
 		require_once 'Classes/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
 		if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
-			$myZip->addDir( $path, $path );
+			$myZip->addDir( $this->options->path . $path, $path );
 			$myZip->close();
 			return true;
 		}
@@ -141,9 +141,9 @@ class Mpm extends Options {
 	
 	public function uninstall( $path ) {
 		if( $this->checkPermission() ) {
-		
+
 			if( $this->createZip($path) ) {
-				Helper::removeDir( $path );
+				Helper::removeDir( $this->options->path . $path );
 				return true;
 			}
 		
@@ -168,7 +168,7 @@ class Mpm extends Options {
 		if ( $this->options->admin )
 			return true;
 		else
-			die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpr folder (just an empty file)');
+			die('if you want to use admin functionality pls create a file "USE_ADMIN_FUNCTIONS" in this Mpm/Configuration/ folder (just an empty file)');
 		
 		return false;
 	}

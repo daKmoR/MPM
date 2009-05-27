@@ -100,11 +100,13 @@
 			</div>';
 		$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or Demos)</span>';
 		
-		$files = Helper::getFiles( $MpmOptions['zipPath'], 2, 0);
+		$files = Helper::getFiles( $MpmOptions['zipPath'], 'files', 0);
+		// remove an index.html file if found
+		unset($files[ array_search('index.html', $files) ]);
 		$install = ''; $restore = '';
 		foreach( $files as $file ) {
 			$fileInfo = explode('^', $file);
-			if( !is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+			if( !is_dir($Mpm->options->path . $fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
 				$install .= '<tr><td><a href="?mode=install&amp;file=' . $MpmOptions['zipPath'] . $file . '"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 			else
 				$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $MpmOptions['zipPath'] . $file . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
@@ -124,7 +126,7 @@
 		
 		
 	} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
-		$files = Helper::getFiles('./', 1);
+		$files = Helper::getFiles($Mpm->options->path, 'dirs');
 		unset( $files['.git'] );
 
 		$center .= '<div><h2>UnInstall</h2>';
