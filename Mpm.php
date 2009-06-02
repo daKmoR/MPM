@@ -9,7 +9,6 @@
 	require_once('Resources/Php/FirePHPCore/fb.php');
 	require_once('Classes/class.Mpm.php');
 	
-	
 	$path = array();
 	if( isset($_REQUEST['file']) )
 		$path = explode('/', $_REQUEST['file']);
