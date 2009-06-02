@@ -2,12 +2,12 @@
 	$url = $_SERVER['HTTP_REFERER'];
 	if( !$url ) die();
 
-	require_once('Mpr/Php/MprConfig.php');
+	require_once('Resources/Php/MpmDefaultConfig.php');
 	
 	if( $useGzip === true )
 		ob_start("ob_gzhandler");
 	
-	if(!$_REQUEST['mode']) {
+	if(!isset($_REQUEST['mode']) ) {
 		header('Content-Type: text/javascript');
 		require_once('Classes/class.Mpr.php');
 		$localMPR = new MPR( $MprOptions );

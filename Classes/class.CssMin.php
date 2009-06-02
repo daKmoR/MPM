@@ -131,6 +131,7 @@ class CssMin {
 	// i.e. rgb(255,170,0) -> #ffaa00
 	function rgb2hex($string = null) {
 		if( !$string ) $string = $this->css;
+		$text = '';
 		
 		while (strpos($string, 'rgb')) {
 			$where = strpos($string, 'rgb');
@@ -521,7 +522,7 @@ class CssMin {
 			// remove blank items from the array
 			$this->file_props[$a] = array_values(array_diff($this->file_props[$a], array(NULL)));
 			// check if this part has no properties
-			if (!$this->file_props[$a][0]) {
+			if ( !isset($this->file_props[$a][0]) ) {
 				// remove the empty prop part of the array and the class(es)
 				array_splice($this->file_selector, $a, 1);
 				array_splice($this->file_props, $a, 1);
@@ -554,6 +555,7 @@ class CssMin {
 	}
 	
 	function render() {
+		$css = '';
 		for ($a = 0; $a < count($this->file_selector); $a++) {
 			for ($b = 0; $b < count($this->file_selector[$a]); $b++)
 				$this->file_selector[$a][$b] = $this->file_selector[$a][$b];

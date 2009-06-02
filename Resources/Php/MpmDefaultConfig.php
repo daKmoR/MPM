@@ -12,6 +12,7 @@
 		'exclude'      => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),  // files that shouldn't be opened while creating the the complete script file
 		'cssMprIsUsed' => true, // do you also use <link rel="stylesheet" type="text/css" href="MprCss.php" media="screen, projection" />?
 		'cache'        => true, // save cache and reuse it?
+		'pathToMpr'    => '../MPR/',
 		'cachePath'    => 'Data/MprCache/',  // where to save the cache [relative or absolute]
 		'compressJs'   => 'minify', //[none, minify] should the generated Js be minified?
 		'compressCss'  => 'minify' //[none, minify] should the generated Css be minified?
@@ -21,7 +22,7 @@
 	if( is_file('Configuration/MpmConfig.php') )
 		include_once 'Configuration/MpmConfig.php';
 	
-	if( !$MpmOptions['cachePath'] )
+	if( !isset($MpmOptions['cachePath']) )
 		$MpmOptions['cachePath'] = $MprOptions['cachePath'];
 	
 ?>

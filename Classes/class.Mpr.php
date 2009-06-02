@@ -101,6 +101,12 @@ class MPR extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	private function prepareContent($jsCode, $what = 'jsInlineCss', &$name = null) {
+		if( !is_dir($this->options->pathToMpr) ) {
+			$regularExpressionsMprPath = '#MPR\.path\s*=\s*["|\'](.*)["|\']\s*;#';
+			preg_match( $regularExpressionsMprPath, $jsCode, $match );
+			if( count($match) )
+				$this->options->pathToMpr = $match[1];
+		}
 		
 		if( $this->options->externalFiles === true ) {
 			$siteRequire = $this->getFileList( $jsCode, 'noLoad' );
@@ -258,10 +264,13 @@ class MPR extends Options {
 			
 		$urlInfo = parse_url($url);
 		$pathinfo = pathinfo( $urlInfo['path'] );
-		$isSiteScript = ( ($pathinfo['extension'] === 'js') || ($pathinfo['extension'] === 'css') ) ? false : true;
+		$isSiteScript = true;
+		if( isset($pathinfo['extension']) )
+			$isSiteScript = ( ($pathinfo['extension'] === 'js') || ($pathinfo['extension'] === 'css') ) ? false : true;
 		
+		$scripts = '';
 		if (!$isSiteScript) {
-			if ( $urlInfo['scheme'] === 'http')
+			if ( isset($urlInfo['scheme']) && $urlInfo['scheme'] === 'http')
 				$scripts = $this->getUrlContent($url);
 			elseif ( is_file($url) )
 				$scripts = file_get_contents($url);

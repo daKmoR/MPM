@@ -97,6 +97,7 @@ class Plugin extends Options {
 		$PluginFiles = Helper::getFiles( $this->options->path );
 
 		if( count($PluginFiles['Demos']) ) {
+			$demos = '';
 			foreach( $PluginFiles['Demos'] as $demo ) {
 				$demoPath = $this->options->path . '/Demos/' . $demo;
 				$demos .= Helper::wrap('<a href="?mode=demo&amp;file=' . $demoPath . '">' . $demo . '</a>', $this->options->demoItemWrap);
@@ -104,7 +105,7 @@ class Plugin extends Options {
 			$content .= Helper::wrap($demos, $this->options->demoWrap);
 		}
 		
-		if( count($PluginFiles['Docu']) ) {
+		if( isset($PluginFiles['Docu']) && count($PluginFiles['Docu']) ) {
 			foreach( $PluginFiles['Docu'] as $docu ) {
 				$docuPath = $this->options->path . '/Docu/' . $docu;
 				$docus .= Helper::wrap('<a href="?mode=docu&amp;file=' . $docuPath . '">' . $docu . '</a>', $this->options->dokuItemWrap);
@@ -112,6 +113,7 @@ class Plugin extends Options {
 			$content .= Helper::wrap($docus, $this->options->dokuWrap);
 		}
 		
+		$sources = '';
 		foreach( $PluginFiles as $source ) {
 			if ( !is_array($source) ) {
 				$sources .= Helper::wrap('<a href="?mode=source&amp;file=' . $this->options->path . '/' . $source . '">' . $source . '</a>', $this->options->sourceItemWrap );
