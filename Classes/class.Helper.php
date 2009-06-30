@@ -97,8 +97,9 @@ class Helper {
 	
 	public static function getPageURL() {
 		$pageURL = 'http';
-		if ($_SERVER['HTTPS'] == 'on') {$pageURL .= 's';}
-			$pageURL .= '://';
+		if ($_SERVER['HTTPS'] == 'on') 
+			$pageURL .= 's';
+		$pageURL .= '://';
 		if ($_SERVER['SERVER_PORT'] != '80')
 			$pageURL .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
 		else
@@ -108,8 +109,9 @@ class Helper {
 
 	public static function getPageDIR() {
 		$pageURL = 'http';
-		if ($_SERVER['HTTPS'] == 'on') {$pageURL .= 's';}
-			$pageURL .= '://';
+		if ($_SERVER['HTTPS'] == 'on')
+			$pageURL .= 's';
+		$pageURL .= '://';
 		if ($_SERVER['SERVER_PORT'] != '80')
 			$pageURL .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['SCRIPT_NAME']);
 		else
