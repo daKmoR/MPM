@@ -13,7 +13,7 @@ class MPR extends Options {
 
 	public $options = array(
 		'base' => '',
-		'pathToMpr' => '../MPR/',
+		'pathToMpr' => '../mpr/',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
 		'cssMprIsUsed' => true,
 		'externalFiles' => true,

@@ -20,7 +20,7 @@ class Mpm extends Options {
 		'plugin' => array(
 			'stdWrap' => '<p>|</p>',
 		),
-		'path'				=> '../MPR/',
+		'path'				=> '../mpr/',
 		'admin' => false,
 		'zipPath' => 'Data/MprZip/',
 		'indexPath' => 'Data/MprIndex/',
