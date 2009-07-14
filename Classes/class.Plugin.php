@@ -100,7 +100,9 @@ class Plugin extends Options {
 			$demos = '';
 			foreach( $PluginFiles['Demos'] as $demo ) {
 				$demoPath = $this->options->path . '/Demos/' . $demo;
-				$demos .= Helper::wrap('<a href="?mode=demo&amp;file=' . $demoPath . '">' . $demo . '</a>', $this->options->demoItemWrap);
+				if( is_file($demoPath) ) {
+					$demos .= Helper::wrap('<a href="?mode=demo&amp;file=' . $demoPath . '">' . $demo . '</a>', $this->options->demoItemWrap);
+				}
 			}
 			$content .= Helper::wrap($demos, $this->options->demoWrap);
 		}
