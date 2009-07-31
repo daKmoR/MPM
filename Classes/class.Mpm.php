@@ -19,12 +19,14 @@ class Mpm extends Options {
 		'pluginListWrap' => '<div class="accordionContent"><div>|<span class="leftBottom"></span></div></div>',
 		'plugin' => array(
 			'stdWrap' => '<p>|</p>',
+			'linkParam' => '',
 		),
 		'path'				=> '../mpr/',
 		'admin' => false,
 		'zipPath' => 'Data/MprZip/',
 		'indexPath' => 'Data/MprIndex/',
-		'cachePath' => 'Data/MprCache/'
+		'cachePath' => 'Data/MprCache/',
+		'linkParam' => ''
 	);
 	
 	private $files = array();
@@ -39,6 +41,9 @@ class Mpm extends Options {
 	 */
 	public function Mpm($options = null) {
 		$this->setOptions($options);
+		if( $this->options->plugin->linkParam != $this->options->linkParam ) {
+			$this->options->plugin->linkParam = $this->options->linkParam;
+		}
 	}
 	
 	/**
@@ -207,7 +212,7 @@ class Mpm extends Options {
 		$content = '';
 		if ( $mode === 'html' ) {
 			foreach ($hits as $hit) {
-				$content .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '">' . $hit->category . ' / ' . $hit->title . ' <span class="' . $hit->type . '">(' . $hit->type . ')</span></a></h3>';
+				$content .= '<h3><a href="'. htmlspecialchars( $hit->url ) . '' . $this->options->linkParam . '">' . $hit->category . ' / ' . $hit->title . ' <span class="' . $hit->type . '">(' . $hit->type . ')</span></a></h3>';
 				$teaser = $hit->teaser;
 				if( strlen($teaser) > 100 )
 					$teaser = substr($teaser, 0, 100) . '...';
