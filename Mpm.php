@@ -1,10 +1,10 @@
 <?php
 	require_once 'Classes/class.MpmGui.php';
 	
-	// // if there is a MprConfig.php file in the root folder include it - you can override any value there
-	// if( is_file('Configuration/MpmConfig.php') )
-		// include_once 'Configuration/MpmConfig.php';
+	$MpmGuiConfig = '';
+	if( is_file(dirname(__FILE__) . '/Configuration/MpmGuiConfig.php') )
+		include_once dirname(__FILE__) . '/Configuration/MpmGuiConfig.php';
 	
-	$MpmGui = new MpmGui();
+	$MpmGui = new MpmGui( $MpmGuiConfig );
 	$MpmGui->render();
 ?>

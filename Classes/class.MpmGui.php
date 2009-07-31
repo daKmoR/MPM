@@ -28,7 +28,7 @@ class MpmGui extends Options {
 			'compressJs'   => 'minify', //[none, minify] should the generated Js be minified?
 			'compressCss'  => 'minify' //[none, minify] should the generated Css be minified?
 		),
-		'path' => ''
+		'path' => '' //relative path to this script (if included in an CMS)
 	);
 
 	public function MpmGui($options = null) {
