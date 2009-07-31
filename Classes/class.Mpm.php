@@ -80,10 +80,10 @@ class Mpm extends Options {
 	
 	public function getDocu( $markdownString ) {
 			// Get the classes:
-		require_once 'Resources/Php/mdocs/markdown.php';
-		require_once 'Resources/Php/mdocs/markdown.mdocs.php';
-		require_once 'Resources/Php/mdocs/geshi.php';
-		require_once 'Resources/Php/mdocs/geshi.mdocs.php';
+		require_once dirname(__FILE__) . '/../Resources/Php/mdocs/markdown.php';
+		require_once dirname(__FILE__) . '/../Resources/Php/mdocs/markdown.mdocs.php';
+		require_once dirname(__FILE__) . '/../Resources/Php/mdocs/geshi.php';
+		require_once dirname(__FILE__) . '/../Resources/Php/mdocs/geshi.mdocs.php';
 
 		$markdown = new MarkdownExtra_Parser_mDocs();
 		$markdown->maxlevel = 1;
@@ -97,7 +97,7 @@ class Mpm extends Options {
 	}
 	
 	public function highlight( $source, $language = 'javascript' ) {
-		require_once 'Resources/Php/mdocs/geshi.php';
+		require_once dirname(__FILE__) . '/../Resources/Php/mdocs/geshi.php';
 		
 		$geshi = new GeSHi($source, $language);
 		return $geshi->parse_code();		
@@ -109,7 +109,7 @@ class Mpm extends Options {
 
 		$pathArray = explode('/', $path);
 			
-		require_once 'Classes/class.AdvZipArchive.php';
+		require_once 'class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
 		if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
 			$myZip->addDir( $this->options->path . $path, $path );
@@ -192,7 +192,7 @@ class Mpm extends Options {
 	}
 	
 	public function search( $query, $mode = 'html' ) {
-		ini_set('include_path', 'Resources/Php/');
+		ini_set('include_path', dirname(__FILE__) . '/../Resources/Php/');
 		require_once('Zend/Search/Lucene.php');
  
 		$index = Zend_Search_Lucene::open( $this->options->indexPath );
@@ -233,7 +233,7 @@ class Mpm extends Options {
 	public function newIndex() {
 		if( $this->checkPermission() ) {
 
-			ini_set('include_path', 'Resources/Php/');
+			ini_set('include_path', dirname(__FILE__) . '/../Resources/Php/');
 			require_once('Zend/Search/Lucene.php');
 			require_once('class.MprIndexedDocument.php');
 			

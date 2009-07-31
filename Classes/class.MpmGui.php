@@ -28,7 +28,8 @@ class MpmGui extends Options {
 			'cachePath'    => 'Data/MprCache/',  // where to save the cache [relative or absolute]
 			'compressJs'   => 'minify', //[none, minify] should the generated Js be minified?
 			'compressCss'  => 'minify' //[none, minify] should the generated Css be minified?
-		)
+		),
+		'path' => ''
 	);
 
 	public function MpmGui($options = null) {
@@ -36,11 +37,6 @@ class MpmGui extends Options {
 		
 		if( !isset($this->options->MpmOptions->cachePath) ) {
 			$this->options->MpmOptions->cachePath = $this->options->MprOptions->cachePath;
-		}
-		
-		if( !isset($this->options->path) ) {
-			//$this->options->path = dirname( dirname( realpath( __FILE__ ) ) ) . '/';
-			$this->options->path = '../typo3conf/ext/mpm/res/MPM/';
 		}
 		
 		//$useGzip = true;               // do you want to use gzip for supplying the generated scripts [deactivate it if you globally use Gzip]
@@ -255,7 +251,7 @@ class MpmGui extends Options {
 	
 		<div id="wrap">
 		
-			<form action="" method="get" id="searchForm">
+			<form action="?a=1' . $this->options->MpmOptions->linkParam . '" method="get" id="searchForm">
 				<div id="header">
 					<h2 style="border: none; margin-bottom: 10px;"><a href="?a=1' . $this->options->MpmOptions->linkParam . '">Your Local <acronym title="MooTools Package Repository">MPR</acronym></a></h2>
 					<div id="search">

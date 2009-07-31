@@ -29,7 +29,7 @@ window.addEvent('domready', function() {
 	
 	SearchResult.fade('hide');
 	var SearchRequest = new Request({
-		url: 'Mpm.php',
+		url: $('searchForm').get('action'),
 		onRequest: function() {
 			SearchResult.set('html', '<img src="Resources/css/img/ajax-loader.gif" alt="loading..." class="spinner" />');
 			SearchResult.fade(1);
