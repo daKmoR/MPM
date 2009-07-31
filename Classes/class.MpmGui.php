@@ -1,6 +1,5 @@
 <?php
 
-// require_once 'Resources/Php/MpmDefaultConfig.php';
 require_once 'class.Mpm.php';
 require_once 'class.Options.php';
 
@@ -45,8 +44,10 @@ class MpmGui extends Options {
 	public function render() {
 
 		$dir = dirname( realpath(__FILE__) );
-		// if( $dir !== substr( realpath($_REQUEST['file']), 0, strlen($dir) ) )
-			// die('you can only use files within MPR');	
+
+		// SECURITY; only process Files from within the given MPR directory
+		if( isset($_REQUEST['file']) && realpath($this->options->MpmOptions->path) !== substr( realpath($_REQUEST['file']), 0, strlen(dirname($dir)) ) )
+			die('you can only use files within the given MPR directory');
 	
 		$path = array();
 		if( isset($_REQUEST['file']) )
@@ -231,7 +232,7 @@ class MpmGui extends Options {
 			MPR.path = \'\';
 			
 			MenuPath = \'';
-				if( isset($path[$pathPartCount-4]) && $path[$pathPartCount-4] !== 'MPR') 
+				if( isset($path[$pathPartCount-4]) && strtoupper($path[$pathPartCount-4]) !== 'MPR' && $path[$pathPartCount-4] != '') 
 					$content .= $path[$pathPartCount-4]; 
 				elseif ( isset($path[$pathPartCount-3]) )
 					$content .= $path[$pathPartCount-3]; 
