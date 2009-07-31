@@ -70,6 +70,8 @@
 ----------------------------------------------------------------------------------------------------------------- */
 	.p33x33x33 .col2, .p25x50x25 .col2  { border-right: 1px solid #dcdcdc; }
 	
+	body { background: #fff; }
+	
 	a { color: #000099; text-decoration: underline; }
 		a:focus, a:hover { color: #000; }
 	blockquote { color: #666; font-style: italic; margin: 10px; }
