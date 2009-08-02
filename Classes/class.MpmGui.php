@@ -266,7 +266,7 @@ class MpmGui extends Options {
 				</div>
 			</form>
 			
-			<div class="colmask equal px240x720">
+			<div class="colmask px240x720">
 				<div class="col1">
 					<div class="content" id="menu">
 						<div>
