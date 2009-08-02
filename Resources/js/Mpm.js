@@ -1,7 +1,7 @@
-$require(MPR.path + 'Core/Core.Small.js');
-$require(MPR.path + 'Core/Request/Request.js');
-$require(MPR.path + 'Core/Fx/Fx.Tween.js');
-$require(MPR.path + 'More/Fx/Fx.Accordion.js');
+$require('Core/Core.Small.js');
+$require('Core/Request/Request.js');
+$require('Core/Fx/Fx.Tween.js');
+$require('More/Fx/Fx.Accordion.js');
 
 window.addEvent('domready', function() {
 	var current = 0;
