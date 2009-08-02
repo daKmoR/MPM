@@ -125,12 +125,12 @@ class MPR extends Options {
 		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
-					$js .= 'MPR.files[\'' . $file . '\'] = 1;' . PHP_EOL;
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
 			foreach( $fileList['js'] as $file ) {
 				if( is_file($this->options->pathToMpr . $file) ) {
 					$js .= file_get_contents($this->options->pathToMpr . $file) . PHP_EOL;
-					$js .= 'MPR.files[\'' . $file . '\'] = 1;' . PHP_EOL;
+					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				} else
 					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
 			}
