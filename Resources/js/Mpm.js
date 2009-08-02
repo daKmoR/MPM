@@ -52,6 +52,7 @@ window.addEvent('domready', function() {
 	});
 	
 	// same height
+	$require('Core/Element/Element.Dimensions.js');
 	var col1 = $$('.px240x720 .col1')[0];
 	var col2 = $$('.px240x720 .col2')[0];
 	if( col2.getSize().y > col1.getSize().y ) {
