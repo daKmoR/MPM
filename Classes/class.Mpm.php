@@ -108,11 +108,14 @@ class Mpm extends Options {
 			mkdir( $this->options->zipPath );
 
 		$pathArray = explode('/', $path);
-			
+		$pathArrayCount = count( $pathArray );
+		
+		$inZipPath = substr( $path, strlen($this->options->path), -1 );
+		
 		require_once 'class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		if( $myZip->open( $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
-			$myZip->addDir( $this->options->path . $path, $path );
+		if( $myZip->open( $this->options->zipPath . $pathArray[$pathArrayCount-3] . '^' . $pathArray[$pathArrayCount-2] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
+			$myZip->addDir( $path, $inZipPath );
 			$myZip->close();
 			return true;
 		}
@@ -124,7 +127,9 @@ class Mpm extends Options {
 	public function getZip( $path ) {
 		if( $this->createZip( $path ) ) {
 			$pathArray = explode('/', $path);
-			header('Location: ' . Helper::getPageDIR() . '/' . $this->options->zipPath . $pathArray[0] . '^' . $pathArray[1] . '.zip');
+			$pathArrayCount = count( $pathArray );
+			
+			header('Location: ' . Helper::getPageDIR() . '/' . $this->options->zipPath . $pathArray[$pathArrayCount-3] . '^' . $pathArray[$pathArrayCount-2] . '.zip');
 			die();
 		}
 		return false;

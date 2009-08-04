@@ -44,9 +44,9 @@ class MpmGui extends Options {
 	public function render() {
 
 		$dir = dirname( realpath(__FILE__) );
-
+		
 		// SECURITY; only process Files from within the given MPR directory
-		if( isset($_REQUEST['file']) && realpath($this->options->MpmOptions->path) !== substr( realpath($_REQUEST['file']), 0, strlen(dirname($dir)) ) )
+		if( isset($_REQUEST['file']) && realpath($this->options->MpmOptions->path) !== substr( realpath($_REQUEST['file']), 0, strlen(realpath($this->options->MpmOptions->path)) ) )
 			die('you can only use files within the given MPR directory');
 	
 		$path = array();

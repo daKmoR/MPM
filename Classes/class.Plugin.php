@@ -68,7 +68,7 @@ class Plugin extends Options {
 			// fb( file_get_contents( $metaPath ) );
 			
 		//$this->options->demo = is_file($demoPath) ? '<a href="?mode=demo&amp;file=' . $demoPath . '"><span>demo</span></a>' : '';
-		$this->options->download = '<a class="download" href="?mode=zip&amp;file=' . $this->options->category . '/' . $this->options->name  . '' . $this->options->linkParam . '"><span>download</span></a>';
+		$this->options->download = '<a class="download" href="?mode=zip&amp;file=' . $this->options->path . '/' . $this->options->linkParam . '"><span>download</span></a>';
 		$this->options->docu = is_file($docuPath) ? '<a class="docu" href="?mode=docu&amp;file=' . $docuPath . '' . $this->options->linkParam . '"><span>docu</span></a>' : '';
 		$this->options->name = '<a href="?mode=pluginDetails&amp;file=' . $this->options->path . '/' . '' . $this->options->linkParam . '"><span>' . $this->options->name . '</span></a>';
 		$this->options->spec = is_file($specPath) ? '<a class="spec" href="?mode=spec&amp;file=' . $specPath . '' . $this->options->linkParam . '"><span>spec</span></a>' : '';
