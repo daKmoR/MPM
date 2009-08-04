@@ -56,9 +56,9 @@ window.addEvent('domready', function() {
 	var col1 = $$('.px240x720 .col1')[0];
 	var col2 = $$('.px240x720 .col2')[0];
 	if( col2.getSize().y > col1.getSize().y ) {
-		col1.setStyle('height', col2.getSize().y);
+		col1.setStyle('min-height', col2.getSize().y);
 	} else {
-		col2.setStyle('height', col1.getSize().y);
+		col2.setStyle('min-height', col1.getSize().y);
 	}
 	
 });
