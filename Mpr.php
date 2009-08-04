@@ -1,22 +1,26 @@
 <?php
 	$url = $_SERVER['HTTP_REFERER'];
 	if( !$url ) die();
+	
+	$MprOptions = array();
+	$useGzip = true;
 
-	require_once('Resources/Php/MpmDefaultConfig.php');
+	if( is_file('Configuration/MprConfig.php' ) ) {
+		include_once('Configuration/MprConfig.php');
+	}
 	
 	if( $useGzip === true )
-		ob_start("ob_gzhandler");
+		ob_start('ob_gzhandler');
+		
+	require_once('Classes/class.Mpr.php');
+	$localMPR = new MPR( $MprOptions );
 	
 	if(!isset($_REQUEST['mode']) ) {
 		header('Content-Type: text/javascript');
-		require_once('Classes/class.Mpr.php');
-		$localMPR = new MPR( $MprOptions );
 		echo $localMPR->getJsInlineCss($url);
-		
 	} elseif( $_REQUEST['mode'] === 'js' ) {
 		header('Content-Type: text/javascript');
-		$localMPR->getScript($url);
-		
+		echo $localMPR->getScript($url);
 	} elseif( $_REQUEST['mode'] === 'css' ) {
 		header('Content-Type: text/css');
 		echo $localMPR->getCss($url);
