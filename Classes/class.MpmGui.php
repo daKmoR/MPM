@@ -17,7 +17,13 @@ class MpmGui extends Options {
 			'indexPath' => 'Data/MprIndex/',  // the folder where you want to save the search index [relative or absolute]
 			'zipPath'   => 'Data/MprZip/',    // the folder where to save/expect full Plugins as zip files [relative or absolute]
 			'path'      => '../mpr/',         // relative path to the Repository
-			'linkParam' => ''
+			'linkParam' => '',
+			'pathPreFix' => '',
+			'plugin' => array(
+				'stdWrap' => '<p>|</p>',
+				'linkParam' => '',
+				'pathPreFix' => ''
+			),			
 		),
 		'MprOptions' => array(
 			'exclude'      => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),  // files that shouldn't be opened while creating the the complete script file
@@ -26,19 +32,18 @@ class MpmGui extends Options {
 			'pathToMpr'    => '../mpr/',
 			'cachePath'    => 'Data/MprCache/',  // where to save the cache [relative or absolute]
 			'compressJs'   => 'minify', //[none, minify] should the generated Js be minified?
-			'compressCss'  => 'minify' //[none, minify] should the generated Css be minified?
+			'compressCss'  => 'minify', //[none, minify] should the generated Css be minified?
+			'pathPreFix' => ''
 		),
-		'path' => '' //relative path to this script (if included in an CMS)
+		'path' => '', //relative path to this script (if included in an CMS),
+		'pathPreFix' => ''
 	);
 
 	public function MpmGui($options = null) {
 		$this->setOptions($options);
-		
 		if( !isset($this->options->MpmOptions->cachePath) ) {
 			$this->options->MpmOptions->cachePath = $this->options->MprOptions->cachePath;
 		}
-		
-		//$useGzip = true;               // do you want to use gzip for supplying the generated scripts [deactivate it if you globally use Gzip]
 	}
 	
 	public function render() {
@@ -87,7 +92,7 @@ class MpmGui extends Options {
 		if( isset($_REQUEST['mode']) ) {
 		
 			if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
-				$demoCode = file_get_contents( $_REQUEST['file'] );
+				$demoCode = file_get_contents( $this->options->pathPreFix . $_REQUEST['file'] );
 				
 				$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 				$center = str_replace('"../', '"' . $Mpm->options->path . $path[$pathPartCount-4] . '/' . $path[$pathPartCount-3] . '/', $center );
@@ -199,7 +204,7 @@ class MpmGui extends Options {
 		require_once 'class.Mpr.php';
 		$localMPR = new MPR( $this->options->MprOptions );
 		$scriptTag = $localMPR->getScriptTagInlineCss(
-			file_get_contents( $this->options->path . 'Resources/js/Mpm.js' ) . PHP_EOL .
+			file_get_contents( dirname(dirname(__FILE__)) . '/Resources/js/Mpm.js' ) . PHP_EOL .
 			$js
 		);
 	

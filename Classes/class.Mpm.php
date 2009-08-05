@@ -20,13 +20,15 @@ class Mpm extends Options {
 		'plugin' => array(
 			'stdWrap' => '<p>|</p>',
 			'linkParam' => '',
+			'pathPreFix' => ''
 		),
 		'path'				=> '../mpr/',
 		'admin' => false,
 		'zipPath' => 'Data/MprZip/',
 		'indexPath' => 'Data/MprIndex/',
 		'cachePath' => 'Data/MprCache/',
-		'linkParam' => ''
+		'linkParam' => '',
+		'pathPreFix' => ''
 	);
 	
 	private $files = array();
@@ -54,7 +56,7 @@ class Mpm extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	public function render() {
-		$this->files = Helper::getFiles( $this->options->path, 'dirs' );
+		$this->files = Helper::getFiles( $this->options->pathPreFix . $this->options->path, 'dirs' );
 		unset( $this->files['.git'] );
 	
 		$content = '';

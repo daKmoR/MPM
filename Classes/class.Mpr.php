@@ -14,6 +14,7 @@ class MPR extends Options {
 	public $options = array(
 		'base' => '',
 		'pathToMpr' => '../mpr/',
+		'pathPreFix' => '',
 		'exclude' => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),
 		'cssMprIsUsed' => true,
 		'externalFiles' => true,
@@ -78,7 +79,7 @@ class MPR extends Options {
 				$resultInfo = pathinfo($result);
 				if ( $resultInfo['extension'] === 'js' ) {
 					if( $mode == 'loadRequire' )
-						$scripts[] = $this->loadUrl( $this->options->pathToMpr . $result);
+						$scripts[] = $this->loadUrl( $this->options->pathPreFix . $this->options->pathToMpr . $result);
 					$fileList['js'][] = $result;
 				}
 
@@ -101,7 +102,7 @@ class MPR extends Options {
 	 * @author Thomas Allmer <at@delusionworld.com>
 	 */
 	private function prepareContent($jsCode, $what = 'jsInlineCss', &$name = null) {
-		if( !is_dir($this->options->pathToMpr) ) {
+		if( !is_dir($this->options->pathPreFix . $this->options->pathToMpr) ) {
 			$regularExpressionsMprPath = '#MPR\.path\s*=\s*["|\'](.*)["|\']\s*;#';
 			preg_match( $regularExpressionsMprPath, $jsCode, $match );
 			if( count($match) )
@@ -121,15 +122,15 @@ class MPR extends Options {
 		
 		$fileList = $this->getFileList( $jsCode );
 		$content = '';
-		$js = (count($fileList['js']) != 0 AND count($fileList['css'] != 0) )  ? file_get_contents($this->options->pathToMpr . 'Tools/Mpr/Mpr.js') : '';
+		$js = (count($fileList['js']) != 0 AND count($fileList['css'] != 0) )  ? file_get_contents( $this->options->pathPreFix . $this->options->pathToMpr . 'Tools/Mpr/Mpr.js') : '';
 		if ($what === 'js' || $what === 'jsInlineCss') {
 			if ($this->options->cssMprIsUsed === true)
 				foreach($fileList['css'] as $file)
 					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				
 			foreach( $fileList['js'] as $file ) {
-				if( is_file($this->options->pathToMpr . $file) ) {
-					$js .= file_get_contents($this->options->pathToMpr . $file) . PHP_EOL;
+				if( is_file($this->options->pathPreFix . $this->options->pathToMpr . $file) ) {
+					$js .= file_get_contents($this->options->pathPreFix . $this->options->pathToMpr . $file) . PHP_EOL;
 					$js .= 'MPR.files[MPR.path + \'' . $file . '\'] = 1;' . PHP_EOL;
 				} else
 					$js .= 'alert("The file ' . $file . ' couldn\'t loaded!");';
@@ -144,7 +145,7 @@ class MPR extends Options {
 		$css = '';
 		if ($what === 'css' || $what === 'jsInlineCss') {
 			foreach( $fileList['css'] as $file ) {
-				$raw = file_get_contents($this->options->pathToMpr . $file);
+				$raw = file_get_contents($this->options->pathPreFix . $this->options->pathToMpr . $file);
 				$raw = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . $this->options->pathToMpr . dirname($file) . "/$1')", $raw); //prepend local files
 				$css .= $raw . PHP_EOL;
 			}
@@ -160,11 +161,12 @@ class MPR extends Options {
 		
 		if( $this->options->externalFiles === true ) {
 			//save cache
-			if( !is_dir($this->options->cachePath) )
-				mkdir( $this->options->cachePath );
-			if( !is_dir($this->options->cachePath . $what . '/') )
-				mkdir( $this->options->cachePath . $what . '/' );
-			file_put_contents( $this->options->cachePath . $what . '/' . $name, $content );
+			
+			if( !is_dir($this->options->pathPreFix . $this->options->cachePath) )
+				mkdir( $this->options->pathPreFix . $this->options->cachePath );
+			if( !is_dir($this->options->pathPreFix . $this->options->cachePath . $what . '/') )
+				mkdir( $this->options->pathPreFix . $this->options->cachePath . $what . '/' );
+			file_put_contents( $this->options->pathPreFix . $this->options->cachePath . $what . '/' . $name, $content );
 		}
 		
 		return $content;

@@ -30,7 +30,8 @@ class Plugin extends Options {
 		'demoItemWrap' => '<li>|</li>',
 		'demoWrap' => '<h2>Available Demos</h2><ul>|</ul>',
 		'sourceWrap' => '<h2>Sourcecode</h2><ul>|</ul>',
-		'sourceItemWrap' => '<li>|</li>'
+		'sourceItemWrap' => '<li>|</li>',
+		'pathPreFix'   => ''
 	);
 	
 	/**
@@ -94,14 +95,14 @@ class Plugin extends Options {
 	
 	public function renderDetail() {
 		$content = '<h1>' . $this->options->name . '</h1>';
-	
-		$PluginFiles = Helper::getFiles( $this->options->path );
+		
+		$PluginFiles = Helper::getFiles( $this->options->pathPreFix . $this->options->path );
 
 		if( count($PluginFiles['Demos']) ) {
 			$demos = '';
 			foreach( $PluginFiles['Demos'] as $demo ) {
 				$demoPath = $this->options->path . '/Demos/' . $demo;
-				if( is_file($demoPath) ) {
+				if( is_file($this->options->pathPreFix . $demoPath) ) {
 					$demos .= Helper::wrap('<a href="?mode=demo&amp;file=' . $demoPath . '' . $this->options->linkParam . '">' . $demo . '</a>', $this->options->demoItemWrap);
 				}
 			}
