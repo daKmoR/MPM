@@ -142,6 +142,10 @@ class MPR extends Options {
 			$content .= $js;
 		}
 		
+		if($content !== '' && $what === 'jsInlineCss') {
+			$content .= file_get_contents( $this->options->pathPreFix . $this->options->pathToMpr . 'Tools/Browser.Styles/Browser.Styles.js');
+		}
+		
 		$css = '';
 		if ($what === 'css' || $what === 'jsInlineCss') {
 			foreach( $fileList['css'] as $file ) {
@@ -154,7 +158,7 @@ class MPR extends Options {
 				$css = CssMin::minify($css);
 			}
 			if ($what === 'jsInlineCss' && $css !== '')
-				$content .= PHP_EOL . 'Asset.styles(\'' . addslashes($css) . '\');';
+				$content .= PHP_EOL . 'Browser.styles(\'' . addslashes($css) . '\');';
 			else
 				$content .= $css;
 		}
