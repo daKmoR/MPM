@@ -96,11 +96,13 @@ class MpmGui extends Options {
 				
 				$center = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 				$center = str_replace('"../', '"' . $Mpm->options->path . $path[$pathPartCount-4] . '/' . $path[$pathPartCount-3] . '/', $center );
+				$center = str_replace('"./', '"' . $Mpm->options->path . $path[$pathPartCount-4] . '/' . $path[$pathPartCount-3] . '/' . $path[$pathPartCount-2] . '/' , $center );
 				
 				$codeHeader = Helper::getContent($demoCode, '<!-- ### Mpr.Header.Start ### -->', '<!-- ### Mpr.Header.End ### -->');
 				if( $codeHeader ) $header .= $codeHeader;
 				
 				$css = Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
+				$css = preg_replace("#url\s*?\('*(.*?)'*\)#", "url('" . dirname($_REQUEST['file']) . "/$1')", $css); //prepend local files
 				if( $css ) $header .= Helper::wrap($css, '<style type="text/css">|</style>');
 				
 				$js = Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
@@ -230,7 +232,7 @@ class MpmGui extends Options {
 		if(isset($_REQUEST['mode'])) 
 			$content .= $path[$pathPartCount-3] . ' ' . ucfirst($_REQUEST['mode']) . ' - ';
 		
-		$content .= 'Your Local MPR (MooTools Plugin Repository)</title>
+		$content .= 'Your Local MPR (MooTools Package Repository)</title>
 		
 		<script type="text/javascript">
 			var MPR = {};
