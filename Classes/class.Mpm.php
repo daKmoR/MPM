@@ -106,17 +106,17 @@ class Mpm extends Options {
 	}
 	
 	public function createZip( $path ) {
-		if( !is_dir($this->options->zipPath) )
-			mkdir( $this->options->zipPath );
-
+		if( !is_dir($this->options->pathPreFix . $this->options->zipPath) )
+			mkdir( $this->options->pathPreFix . $this->options->zipPath );
+			
 		$pathArray = explode('/', $path);
 		$pathArrayCount = count( $pathArray );
 		
-		$inZipPath = substr( $path, strlen($this->options->path), -1 );
+		$inZipPath = substr( $path, strlen($this->options->pathPreFix . $this->options->path), -1 );
 		
-		require_once 'class.AdvZipArchive.php';
+		require_once dirname(__FILE__) . '/class.AdvZipArchive.php';
 		$myZip = new AdvZipArchive();
-		if( $myZip->open( $this->options->zipPath . $pathArray[$pathArrayCount-3] . '^' . $pathArray[$pathArrayCount-2] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
+		if( $myZip->open($this->options->pathPreFix . $this->options->zipPath . $pathArray[$pathArrayCount-3] . '^' . $pathArray[$pathArrayCount-2] . '.zip', ZIPARCHIVE::CREATE) === TRUE ) {
 			$myZip->addDir( $path, $inZipPath );
 			$myZip->close();
 			return true;
@@ -127,6 +127,7 @@ class Mpm extends Options {
 
 	
 	public function getZip( $path ) {
+		$path = $this->options->pathPreFix . $path;
 		if( $this->createZip( $path ) ) {
 			$pathArray = explode('/', $path);
 			$pathArrayCount = count( $pathArray );
@@ -139,10 +140,10 @@ class Mpm extends Options {
 	
 	public function install( $path ) {
 		if( $this->checkPermission() ) {
-		
+			$path = $this->options->pathPreFix . $path;
 			$zip = new ZipArchive();
 			if ( $zip->open($path) === TRUE ) {
-				$zip->extractTo( $this->options->path );
+				$zip->extractTo( $this->options->pathPreFix . $this->options->path );
 				$zip->close();
 				return true;
 			}
@@ -154,8 +155,8 @@ class Mpm extends Options {
 	public function uninstall( $path ) {
 		if( $this->checkPermission() ) {
 
-			if( $this->createZip($path) ) {
-				Helper::removeDir( $this->options->path . $path );
+			if( $this->createZip($this->options->pathPreFix . $path) ) {
+				Helper::removeDir( $this->options->pathPreFix . $path );
 				return true;
 			}
 		
@@ -167,10 +168,10 @@ class Mpm extends Options {
 		if( $this->checkPermission() ) {
 		
 			$fileInfo = explode('^', $path);
-			if( is_dir($fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
-				Helper::removeDir( $path );
+			if( is_dir($this->options->pathPreFix . $fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+				Helper::removeDir( $this->options->pathPreFix . $path );
 			
-			$this->install( $path );
+			return $this->install( $path );
 		
 		}
 		return false;
@@ -188,21 +189,23 @@ class Mpm extends Options {
 	public function clearCache() {
 		if( $this->checkPermission() ) {
 	
-			if( is_dir($this->options->cachePath . 'css/') )
-				Helper::removeDir( $this->options->cachePath . 'css/' );
-			if( is_dir($this->options->cachePath . 'js/') )
-				Helper::removeDir( $this->options->cachePath . 'js/' );
-			if( is_dir($this->options->cachePath . 'jsInlineCss/') )
-				Helper::removeDir( $this->options->cachePath . 'jsInlineCss/' );
-				
+			if( is_dir($this->options->pathPreFix . $this->options->cachePath . 'css/') )
+				Helper::removeDir( $this->options->pathPreFix . $this->options->cachePath . 'css/' );
+			if( is_dir($this->options->pathPreFix . $this->options->cachePath . 'js/') )
+				Helper::removeDir( $this->options->pathPreFix . $this->options->cachePath . 'js/' );
+			if( is_dir($this->options->pathPreFix . $this->options->cachePath . 'jsInlineCss/') )
+				Helper::removeDir( $this->options->pathPreFix . $this->options->cachePath . 'jsInlineCss/' );
+			
+			return true;	
 		}
+		return false;
 	}
 	
 	public function search( $query, $mode = 'html' ) {
 		ini_set('include_path', dirname(__FILE__) . '/../Resources/Php/');
 		require_once('Zend/Search/Lucene.php');
  
-		$index = Zend_Search_Lucene::open( $this->options->indexPath );
+		$index = Zend_Search_Lucene::open( $this->options->pathPreFix . $this->options->indexPath );
 
 		if( (strpos($query, '*') === false) AND (strpos($query, '"') === false) )
 			$query .= '*';
@@ -242,24 +245,24 @@ class Mpm extends Options {
 
 			ini_set('include_path', dirname(__FILE__) . '/../Resources/Php/');
 			require_once('Zend/Search/Lucene.php');
-			require_once('class.MprIndexedDocument.php');
+			require_once(dirname(__FILE__) . '/class.MprIndexedDocument.php');
 			
-			$index = Zend_Search_Lucene::create( $this->options->indexPath );
+			$index = Zend_Search_Lucene::create( $this->options->pathPreFix . $this->options->indexPath );
 		
-			$files = Helper::getFiles( $this->options->path, 'dirs' );
+			$files = Helper::getFiles( $this->options->pathPreFix . $this->options->path, 'dirs' );
 			unset( $files['.git'] );
 			
 			foreach($files as $category => $subdir) {
 				foreach( $subdir as $dir => $items ) {
 					$path = $this->options->path . $category . '/' . $dir . '/Docu/';
-					if( is_dir($path) ) {
-						$docuFiles = Helper::getFiles( $path, 'files' );
+					if( is_dir($this->options->pathPreFix . $path) ) {
+						$docuFiles = Helper::getFiles( $this->options->pathPreFix . $path, 'files' );
 						if( count($docuFiles) ) {
 							foreach( $docuFiles as $docu ) {
-								$text = file_get_contents($path . $docu);
+								$text = file_get_contents($this->options->pathPreFix . $path . $docu);
 								$teaser = explode("\n", substr($text, 0, 300) );
 								$teaser = str_replace( array('[', ']'), NULL, $teaser[3]);
-								$id = 'Mpm.php?mode=docu&file=' . $path . $docu;
+								$id = '?mode=docu&file=' . $path . $docu;
 							
 								$curDoc = array('doc_id' => $id, 'url' => $id, 'teaser' => $teaser, 'category' => $category, 'type' => 'docu', 'title' => $docu , 'content' => $text);
 								
@@ -270,16 +273,15 @@ class Mpm extends Options {
 					}
 						
 					$path = $this->options->path . $category . '/' . $dir . '/Demos/';
-					
-					if( is_dir($path) ) {
-						$demoFiles = Helper::getFiles( $path, 'files' );
+					if( is_dir($this->options->pathPreFix . $path) ) {
+						$demoFiles = Helper::getFiles( $this->options->pathPreFix . $path, 'files' );
 						if( count($demoFiles) ) {
 							foreach( $demoFiles as $demo ) {
-								$demoCode = file_get_contents( $path . $demo );
+								$demoCode = file_get_contents( $this->options->pathPreFix . $path . $demo );
 								$text = Helper::getContent($demoCode, '<!-- ### Mpr.Html.Start ### -->', '<!-- ### Mpr.Html.End ### -->');
 								$teaser = explode("\n", substr($text, 0, 300) );
 								$teaser = str_replace( array('[', ']'), NULL, $teaser[4]);
-								$id = 'Mpm.php?mode=demo&file=' . $path . $demo;
+								$id = '?mode=demo&file=' . $path . $demo;
 								$text .= Helper::getContent($demoCode, '/* ### Mpr.Css.Start ### */', '/* ### Mpr.Css.End ### */');
 								$text .= Helper::getContent($demoCode, '/* ### Mpr.Js.Start ### */', '/* ### Mpr.Js.End ### */');
 

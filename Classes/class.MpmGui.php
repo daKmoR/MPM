@@ -23,7 +23,7 @@ class MpmGui extends Options {
 				'stdWrap' => '<p>|</p>',
 				'linkParam' => '',
 				'pathPreFix' => ''
-			),			
+			),
 		),
 		'MprOptions' => array(
 			'exclude'      => array('mprjs.php', 'jsspec.js', 'jquery', 'diffmatchpatch.js', 'mprfullcore.js'),  // files that shouldn't be opened while creating the the complete script file
@@ -51,8 +51,13 @@ class MpmGui extends Options {
 		$dir = dirname( realpath(__FILE__) );
 		
 		// SECURITY; only process Files from within the given MPR directory
-		if( isset($_REQUEST['file']) && realpath($this->options->MpmOptions->path) !== substr( realpath($_REQUEST['file']), 0, strlen(realpath($this->options->MpmOptions->path)) ) )
-			die('you can only use files within the given MPR directory');
+		if( isset($_REQUEST['mode']) && $_REQUEST['mode'] !== 'install' && $_REQUEST['mode'] !== 'restore' ) {
+			if( isset($_REQUEST['file']) && realpath($this->options->MpmOptions->path) !== substr( realpath($_REQUEST['file']), 0, strlen(realpath($this->options->MpmOptions->path)) ) )
+				die('you can only use files within the given MPR directory');
+		} else {
+			if( isset($_REQUEST['file']) && realpath($this->options->pathPreFix . $this->options->MpmOptions->zipPath) !== substr( realpath($this->options->pathPreFix . $_REQUEST['file']), 0, strlen(realpath($this->options->pathPreFix . $this->options->MpmOptions->zipPath)) ) )
+				die('you can only use files within the given zip directory');
+		}
 	
 		$path = array();
 		if( isset($_REQUEST['file']) )
@@ -60,8 +65,11 @@ class MpmGui extends Options {
 		$pathPartCount = count($path);
 
 		$Mpm = new Mpm( $this->options->MpmOptions );
+		$js = '';
+		$header = '';
+		$center = '';
 		
-		if( is_file($this->options->path . 'Configuration/USE_ADMIN_FUNCTIONS') ) {
+		if( is_file($this->options->pathPreFix . $this->options->path . 'Configuration/USE_ADMIN_FUNCTIONS') ) {
 			$Mpm->options->admin = true;
 		}
 		
@@ -79,16 +87,13 @@ class MpmGui extends Options {
 				$center = $status ? 'Restore successful' : 'Restore failed';
 				
 			} elseif ( $_REQUEST['mode'] === 'clearCache' ) {
-				$Mpm->clearCache();
+				$status = $Mpm->clearCache();
+				$center = $status ? 'Cache cleared successfully' : 'could not clear cache';
 				
 			}
 		}
 		
 		$left = $Mpm->render();
-		$js = '';
-		$header = '';
-		$center = '';
-		
 		if( isset($_REQUEST['mode']) ) {
 		
 			if ( $_REQUEST['mode'] === 'demo' && $_REQUEST['file'] != '' ) {
@@ -113,7 +118,7 @@ class MpmGui extends Options {
 				/*************************/
 				// DOCU
 				$header = '<link rel="stylesheet" href="' . $this->options->path . 'Resources/css/docs.css" type="text/css" media="screen" />';
-				$center = $Mpm->getDocu( file_get_contents($_REQUEST['file']) );
+				$center = $Mpm->getDocu( file_get_contents( $this->options->pathPreFix . $_REQUEST['file']) );
 				
 			} elseif ($_REQUEST['mode'] === 'spec')  {
 				$header = '
@@ -146,7 +151,7 @@ class MpmGui extends Options {
 				
 			} elseif ( $_REQUEST['mode'] === 'source' && $_REQUEST['file'] != '' ) {
 				$center = '<h1>' . $path[$pathPartCount-1] . '</h1>';
-				$center .= $Mpm->highlight( file_get_contents( $_REQUEST['file'] ) );
+				$center .= $Mpm->highlight( file_get_contents( $this->options->pathPreFix . $_REQUEST['file'] ) );
 				
 			
 			} elseif ( $_REQUEST['mode'] === 'admin_general' ) {
@@ -157,13 +162,15 @@ class MpmGui extends Options {
 					</div>';
 				$center .= '<div><h2>Install</h2><span class="note" style="display: block; margin-top: -15px; margin-bottom: 15px;">Once you installed a new Plugin you might want to update the Search index to find stuff from the new Plugin (if it has a Docu or Demos)</span>';
 				
-				$files = Helper::getFiles( $this->options->MpmOptions->zipPath, 'files', 0);
+				$files = Helper::getFiles( $this->options->pathPreFix . $this->options->MpmOptions->zipPath, 'files', 0);
 				// remove an index.html file if found
-				unset($files[ array_search('index.html', $files) ]);
+				if( array_search('index.html', $files) !== false ) {
+					unset($files[ array_search('index.html', $files) ]);
+				}
 				$install = ''; $restore = '';
 				foreach( $files as $file ) {
 					$fileInfo = explode('^', $file);
-					if( !is_dir($Mpm->options->path . $fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
+					if( !is_dir($this->options->pathPreFix . $Mpm->options->path . $fileInfo[0] . '/' . basename($fileInfo[1], '.zip')) )
 						$install .= '<tr><td><a href="?mode=install&amp;file=' . $this->options->MpmOptions->zipPath . $file . '' . $this->options->MpmOptions->linkParam . '"><span>install</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
 					else
 						$restore .= '<tr><td><a href="?mode=restore&amp;file=' . $this->options->MpmOptions->zipPath . $file . '' . $this->options->MpmOptions->linkParam . '"><span>restore</span></a></td><td>' . basename($fileInfo[1], '.zip') . '</td><td>' . $fileInfo[0] . '</td></tr>';
@@ -183,14 +190,14 @@ class MpmGui extends Options {
 				
 				
 			} elseif ( $_REQUEST['mode'] === 'admin_uninstall' ) {
-				$files = Helper::getFiles($Mpm->options->path, 'dirs');
+				$files = Helper::getFiles($this->options->pathPreFix . $Mpm->options->path, 'dirs');
 				unset( $files['.git'] );
 
 				$center .= '<div><h2>UnInstall</h2>';
 				$unInstall = '';
 				foreach($files as $category => $subdir) {
 					foreach( $subdir as $dir => $empty ) {
-						$unInstall .= '<tr><td><a href="?mode=uninstall&amp;file=' . $category . '/' . $dir . '' . $this->options->MpmOptions->linkParam . '">uninstall</a></td><td>' . $dir . '</td><td>' . $category . '</td></tr>';
+						$unInstall .= '<tr><td><a href="?mode=uninstall&amp;file=' . $Mpm->options->path . $category . '/' . $dir . '/' . $this->options->MpmOptions->linkParam . '">uninstall</a></td><td>' . $dir . '</td><td>' . $category . '</td></tr>';
 					}
 				}
 				
