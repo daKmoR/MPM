@@ -289,7 +289,7 @@ class MpmGui extends Options {
 								<div>
 									<p><a href="?mode=admin_general' . $this->options->MpmOptions->linkParam . '"><span>General</span></a></p>
 									<p><a href="?mode=admin_uninstall' . $this->options->MpmOptions->linkParam . '"><span>UnInstall</span></a></p>
-									<span class="leftBottom"/>
+									<span class="leftBottom"></span>
 								</div>
 							</div>
 						</div>
