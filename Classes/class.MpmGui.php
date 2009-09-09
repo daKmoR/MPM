@@ -243,7 +243,7 @@ class MpmGui extends Options {
 		
 		<script type="text/javascript">
 			var MPR = {};
-			MPR.path = \'\';
+			MPR.path = \''. $this->options->MpmOptions->path . '\';
 			
 			MenuPath = \'';
 				if( isset($path[$pathPartCount-4]) && strtoupper($path[$pathPartCount-4]) !== 'MPR' && $path[$pathPartCount-4] != '') 
@@ -272,10 +272,7 @@ class MpmGui extends Options {
 					<div id="search">
 						<input type="text" name="query" id="searchInput" />
 						<input type="hidden" name="mode" value="search" />
-						<div id="searchResult">
-							<h3><a href="?mode=doc&amp;file=./Core/Element.Style/Doc/Element.Style.md">Core / Element.Style</a></h3>
-							<p>Custom Native to allow all of its methods to be used with any DOM element via the dollar function $....</p>
-						</div>
+						<div id="searchResult"></div>
 					</div>
 				</div>
 			</form>
