@@ -167,9 +167,9 @@ class MPR extends Options {
 			//save cache
 			
 			if( !is_dir($this->options->pathPreFix . $this->options->cachePath) )
-				mkdir( $this->options->pathPreFix . $this->options->cachePath );
+				mkdir( $this->options->pathPreFix . $this->options->cachePath, 0777, true );
 			if( !is_dir($this->options->pathPreFix . $this->options->cachePath . $what . '/') )
-				mkdir( $this->options->pathPreFix . $this->options->cachePath . $what . '/' );
+				mkdir( $this->options->pathPreFix . $this->options->cachePath . $what . '/', 0777, true );
 			file_put_contents( $this->options->pathPreFix . $this->options->cachePath . $what . '/' . $name, $content );
 		}
 		
